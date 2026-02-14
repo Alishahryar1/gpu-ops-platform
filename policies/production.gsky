@@ -1,0 +1,64 @@
+# Production GPU Pool Policy
+# This policy defines allocation rules for production workloads
+
+# Define a GPU pool with strict requirements
+def production_pool():
+    return gpu_pool(
+        name = "gpu_pool_prod",
+        gpu_type = ["RTX_5070ti", "A100", "H100"],
+        min_memory_gb = 16,
+        max_temp_c = 85,
+        power_policy = "performance",
+        health_threshold = 0.95,
+
+        # Optimization strategies
+        opt_strategies = [
+            optimize_clock(
+                target = "maximum",
+                temp_limit = 80
+            ),
+            optimize_memory(
+                strategy = "prealloc",
+                waste_threshold = 0.2
+            )
+        ],
+
+        # Health checks
+        health_checks = [
+            check("temperature", interval_sec = 10),
+            check("power", interval_sec = 60),
+            check("memory", interval_sec = 30)
+        ]
+    )
+
+# Register the production pool
+gpu_ops.register_pool(production_pool())
+
+# Define scheduling rules
+def scheduling_rules():
+    return schedule_ruleset(
+        name = "prod_scheduling",
+
+        rules = [
+            # Prioritize high-priority jobs
+            priority_rule(
+                label = "job_priority",
+                values = ["critical", "high", "normal", "low"]
+            ),
+
+            # Preferentially allocate GPUs with lower temperature
+            balance_rule(
+                metric = "temperature",
+                strategy = "least"
+            ),
+
+            # Spread jobs across pools
+            balance_rule(
+                metric = "pool_utilization",
+                strategy = "least"
+            )
+        ]
+    )
+
+# Register scheduling rules
+gpu_ops.register_schedule(scheduling_rules())

@@ -1,0 +1,52 @@
+# Development GPU Pool Policy
+# This policy defines allocation rules for development/testing workloads
+
+def development_pool():
+    return gpu_pool(
+        name = "gpu_pool_dev",
+        gpu_type = ["RTX_5070ti", "RTX_4090"],
+        min_memory_gb = 8,
+        max_temp_c = 90,
+        power_policy = "adaptive",
+        health_threshold = 0.85,
+
+        # Relaxed optimization for dev workloads
+        opt_strategies = [
+            optimize_clock(
+                target = "balanced",
+                temp_limit = 90
+            ),
+            optimize_power(
+                target = "efficiency"
+            )
+        ],
+
+        # Less frequent health checks
+        health_checks = [
+            check("temperature", interval_sec = 30),
+            check("memory", interval_sec = 60)
+        ]
+    )
+
+gpu_ops.register_pool(development_pool())
+
+# Dev scheduling - round-robin by default
+def dev_scheduling():
+    return schedule_ruleset(
+        name = "dev_scheduling",
+
+        rules = [
+            # Simple round-robin distribution
+            distribution_rule(
+                strategy = "round_robin"
+            ),
+
+            # Preemptible workloads allowed
+            preemption_rule(
+                allow = True,
+                priority_threshold = "normal"
+            )
+        ]
+    )
+
+gpu_ops.register_schedule(dev_scheduling())

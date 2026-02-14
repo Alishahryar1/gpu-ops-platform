@@ -1,0 +1,4 @@
+# Starlark Policy Engine Dependencies
+# Install with UV (recommended): uv pip install -r requirements.txt
+
+starlark>=0.6.0
