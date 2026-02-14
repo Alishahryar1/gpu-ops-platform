@@ -1,6 +1,6 @@
 # Starlark Policy Engine for GPU Ops Platform
 
-A Python-based Starlark policy engine for defining and evaluating GPU allocation, scheduling, and optimization policies.
+A Python-based Starlark policy engine for defining and evaluating GPU allocation, scheduling, and optimization policies. Uses `starlark-go` - the Python bindings for Go's Starlark interpreter (go.starlark.net).
 
 ## Requirements
 
@@ -10,18 +10,10 @@ A Python-based Starlark policy engine for defining and evaluating GPU allocation
 ## Installation with UV
 
 ```bash
-# Create virtual environment and install dependencies
-uv venv
-
-# Activate venv (Windows)
-.venv\Scripts\activate
-
-# Activate venv (Linux/macOS)
-source .venv/bin/activate
+# From project root
+cd python
 
 # Install dependencies
-uv pip install -r requirements.txt
-# OR simply:
 uv sync
 ```
 
@@ -29,15 +21,29 @@ uv sync
 
 ### Command Line
 
+Run from the `python` directory:
+
 ```bash
+cd python
+
 # Load and test all policies
-python engine.py --load-all --list-pools
+python -m starlark_engine.engine --load-all --list-pools
 
 # Test allocation for specific GPU
-python engine.py --load-all --test-gpu 0
+python -m starlark_engine.engine --load-all --test-gpu 0
 
 # Load specific policy file
-python engine.py --load development.gsky
+python -m starlark_engine.engine --load ../policies/development.gsky
+```
+
+Or use the build script from project root:
+
+```powershell
+# Windows
+.\build.ps1 -PolicyTest
+
+# Linux/macOS
+make policy-test
 ```
 
 ### Python API
@@ -46,7 +52,7 @@ python engine.py --load development.gsky
 from starlark_engine import PolicyEngine, GPUInfo
 
 # Create engine
-engine = PolicyEngine(policy_dir="../../policies")
+engine = PolicyEngine(policy_dir="../policies")
 
 # Load all policies
 engine.load_all_policies()
@@ -89,10 +95,19 @@ def production_pool():
 gpu_ops.register_pool(production_pool())
 ```
 
+## About starlark-go
+
+This package uses `starlark-go` - Python bindings for go.starlark.net, which is the same Starlark implementation used internally at NVIDIA for GPU resource management and configuration.
+
 ## Development
 
 ```bash
-# Run tests (once dependencies are installed)
+cd python
+
+# Install dev dependencies
+uv sync --dev
+
+# Run tests
 pytest
 
 # Lint code

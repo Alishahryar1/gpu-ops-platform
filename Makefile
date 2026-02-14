@@ -51,12 +51,12 @@ run-cli:
 # Policy engine (using UV)
 policy-test:
 	@echo "Testing policy engine..."
-	cd python/starlark_engine && uv sync && python engine.py --load-all
+	cd python && uv sync && python -m starlark_engine.engine --load-all
 
 policy-install:
 	@echo "Installing policy engine dependencies with UV..."
 	@which uv > /dev/null 2>&1 || (echo "UV not found. Install: pip install uv" && exit 1)
-	cd python/starlark_engine && uv sync
+	cd python && uv sync
 
 # Development
 dev-deps:

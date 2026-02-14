@@ -94,19 +94,17 @@ The daemon will start:
 pip install uv
 
 # Install Python dependencies with UV
-cd python/starlark_engine
+cd python
 uv sync
-# or
-uv pip install -r requirements.txt
 
 # Load and test policies
-python engine.py --load-all
+python -m starlark_engine.engine --load-all
 
 # View registered pools
-python engine.py --load-all --list-pools
+python -m starlark_engine.engine --load-all --list-pools
 
 # Test allocation for specific GPU
-python engine.py --load-all --test-gpu 0
+python -m starlark_engine.engine --load-all --test-gpu 0
 ```
 
 ## API Endpoints
@@ -178,7 +176,7 @@ Install Python 3.10+ from https://www.python.org/downloads/ and run:
 pip install uv
 
 # Install dependencies with UV
-cd python/starlark_engine
+cd python
 uv sync
 ```
 

@@ -2,31 +2,35 @@
 name = "gpu-ops-starlark-engine"
 version = "0.1.0"
 description = "Starlark policy engine for GPU Ops Platform"
-readme = "README.md"
-requires-python = "==3.11.9"
-dependencies = [
-    "starlark",
-]
+readme = "starlark_engine/README.md"
+requires-python = "==3.10.*"
+dependencies = []
 
 
 [project.scripts]
-gputl-policy = "engine:main"
+gputl-policy = "starlark_engine.engine:main"
+
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 
-[tool.uv]
-dev-dependencies = [
+# Explicitly specify packages to include
+[tool.hatch.build.targets.wheel]
+packages = ["starlark_engine"]
+
+
+[dependency-groups]
+dev = [
     "pytest",
     "ruff",
-    "mypy",
+    "ty"
 ]
+
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W"]

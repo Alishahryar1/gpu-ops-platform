@@ -128,14 +128,14 @@ function Run-PolicyTest {
 
     # Install dependencies with UV
     Write-Host "Installing dependencies with UV..." -ForegroundColor Cyan
-    Push-Location python\starlark_engine
+    Push-Location python
     uv sync
-    $popLocated = $true
     Pop-Location
 
     # Run the engine
-    Push-Location python\starlark_engine
-    $py engine.py --load-all
+    Write-Host "Running policy engine..." -ForegroundColor Cyan
+    Push-Location python
+    $py -m starlark_engine.engine --load-all
     Pop-Location
 }
 
