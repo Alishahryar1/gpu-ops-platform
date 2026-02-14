@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,8 +12,8 @@ import (
 	"time"
 
 	"github.com/alish/gpu-ops-platform/pkg/health"
-	"github.com/alish/gpu-ops-platform/pkg/registration"
 	"github.com/alish/gpu-ops-platform/pkg/metrics"
+	"github.com/alish/gpu-ops-platform/pkg/registration"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -29,15 +28,15 @@ type GPUManager struct{}
 // GetGPU returns a mock GPU for development.
 func (m *GPUManager) GetGPU(id int) (*health.GPU, error) {
 	return &health.GPU{
-		ID:           id,
-		Name:         "NVIDIA GeForce RTX 5070 Ti",
-		TemperatureC: 35.0,
-		PowerUsageW:  10.0,
-		PowerLimitW:  250.0,
-		UsedMemoryGB: 0.0,
+		ID:            id,
+		Name:          "NVIDIA GeForce RTX 5070 Ti",
+		TemperatureC:  35.0,
+		PowerUsageW:   10.0,
+		PowerLimitW:   250.0,
+		UsedMemoryGB:  0.0,
 		TotalMemoryGB: 24.0,
-		Online:       true,
-		Registered:   true,
+		Online:        true,
+		Registered:    true,
 	}, nil
 }
 
@@ -45,15 +44,15 @@ func (m *GPUManager) GetGPU(id int) (*health.GPU, error) {
 func (m *GPUManager) GetAllGPUs() []health.GPU {
 	return []health.GPU{
 		{
-			ID:           0,
-			Name:         "NVIDIA GeForce RTX 5070 Ti",
-			TemperatureC: 35.0,
-			PowerUsageW:  10.0,
-			PowerLimitW:  250.0,
-			UsedMemoryGB: 0.0,
+			ID:            0,
+			Name:          "NVIDIA GeForce RTX 5070 Ti",
+			TemperatureC:  35.0,
+			PowerUsageW:   10.0,
+			PowerLimitW:   250.0,
+			UsedMemoryGB:  0.0,
 			TotalMemoryGB: 24.0,
-			Online:       true,
-			Registered:   true,
+			Online:        true,
+			Registered:    true,
 		},
 	}
 }
@@ -88,30 +87,30 @@ func (d *Daemon) Initialize() error {
 
 	// Register default health checks
 	d.healthMonitor.RegisterCheck(&health.CheckConfig{
-		Name:             "temperature_check",
-		CheckType:        "temperature",
-		IntervalSec:      10,
-		WarningThreshold: 75.0,
+		Name:              "temperature_check",
+		CheckType:         "temperature",
+		IntervalSec:       10,
+		WarningThreshold:  75.0,
 		CriticalThreshold: 85.0,
-		Enabled:          true,
+		Enabled:           true,
 	})
 
 	d.healthMonitor.RegisterCheck(&health.CheckConfig{
-		Name:             "power_check",
-		CheckType:        "power",
-		IntervalSec:      60,
-		WarningThreshold: 80.0,
+		Name:              "power_check",
+		CheckType:         "power",
+		IntervalSec:       60,
+		WarningThreshold:  80.0,
 		CriticalThreshold: 95.0,
-		Enabled:          true,
+		Enabled:           true,
 	})
 
 	d.healthMonitor.RegisterCheck(&health.CheckConfig{
-		Name:             "memory_check",
-		CheckType:        "memory",
-		IntervalSec:      30,
-		WarningThreshold: 80.0,
+		Name:              "memory_check",
+		CheckType:         "memory",
+		IntervalSec:       30,
+		WarningThreshold:  80.0,
 		CriticalThreshold: 95.0,
-		Enabled:          true,
+		Enabled:           true,
 	})
 
 	return nil
@@ -201,7 +200,7 @@ func (d *Daemon) RunHealthChecks(ctx context.Context) {
 func (d *Daemon) Shutdown(ctx context.Context) error {
 	log.Println("Shutting down daemon...")
 
-	 Gracefull shutdown of servers
+	// Graceful shutdown of servers
 	if d.httpServer != nil {
 		if err := d.httpServer.Shutdown(ctx); err != nil {
 			log.Printf("HTTP server shutdown error: %v", err)
@@ -214,12 +213,12 @@ func (d *Daemon) Shutdown(ctx context.Context) error {
 		}
 	}
 
-	 Save registry state
+	// Save registry state
 	if err := d.registry.SaveToFile("/var/lib/gputl/registry.json"); err != nil {
 		log.Printf("Warning: Could not save registry: %v", err)
 	}
 
-	 Stop health monitor
+	// Stop health monitor
 	d.healthMonitor.Stop()
 
 	log.Println("Daemon shutdown complete")

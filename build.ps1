@@ -135,7 +135,7 @@ function Run-PolicyTest {
     # Run the engine
     Write-Host "Running policy engine..." -ForegroundColor Cyan
     Push-Location python
-    $py -m starlark_engine.engine --load-all
+    & $py -m starlark_engine.engine --load-all
     Pop-Location
 }
 

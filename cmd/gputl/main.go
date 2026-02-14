@@ -38,7 +38,11 @@ func NewClient(baseURL string) *Client {
 
 func (c *Client) DoRequest(method, path string, body io.Reader) ([]byte, error) {
 	url := c.BaseURL + path
-	resp, err := c.HTTPClient.DoRequest(method, url, body)
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}

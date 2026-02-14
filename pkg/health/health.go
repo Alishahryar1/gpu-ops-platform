@@ -3,6 +3,7 @@ package health
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -18,32 +19,32 @@ const (
 
 // CheckConfig defines configuration for a health check.
 type CheckConfig struct {
-	Name         string
-	CheckType    string // "temperature", "power", "memory", "pci"
-	IntervalSec  int
-	WarningThreshold float64
+	Name              string
+	CheckType         string // "temperature", "power", "memory", "pci"
+	IntervalSec       int
+	WarningThreshold  float64
 	CriticalThreshold float64
-	Enabled      bool
+	Enabled           bool
 }
 
 // CheckResult represents the result of a single health check.
 type CheckResult struct {
-	CheckName   string
-	GPUID       int
-	Status      Status
-	Value       float64
-	Threshold   float64
-	Message     string
-	Timestamp   time.Time
+	CheckName string
+	GPUID     int
+	Status    Status
+	Value     float64
+	Threshold float64
+	Message   string
+	Timestamp time.Time
 }
 
 // HealthMonitor monitors GPU health across all registered checks.
 type HealthMonitor struct {
-	mu           sync.RWMutex
-	checks       map[string]*CheckConfig
-	results      map[string]*CheckResult
-	gpuManager   GPUInterface
-	stopped      chan struct{}
+	mu         sync.RWMutex
+	checks     map[string]*CheckConfig
+	results    map[string]*CheckResult
+	gpuManager GPUInterface
+	stopped    chan struct{}
 }
 
 // GPUInterface defines the interface for GPU operations.
@@ -54,14 +55,15 @@ type GPUInterface interface {
 
 // GPU represents a minimal GPU interface for health checks.
 type GPU struct {
-	ID               int
-	Name             string
-	TemperatureC     float64
-	PowerUsageW      float64
-	UsedMemoryGB     float64
-	TotalMemoryGB    float64
-	Online           bool
-	Registered       bool
+	ID            int
+	Name          string
+	TemperatureC  float64
+	PowerUsageW   float64
+	PowerLimitW   float64
+	UsedMemoryGB  float64
+	TotalMemoryGB float64
+	Online        bool
+	Registered    bool
 }
 
 // NewHealthMonitor creates a new health monitor.
