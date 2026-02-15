@@ -9,6 +9,7 @@ dependencies = []
 
 [project.scripts]
 gputl-policy = "starlark_engine.engine:main"
+star = "starlark_engine.engine:main"
 
 
 [build-system]

@@ -27,13 +27,13 @@ Run from the `python` directory:
 cd python
 
 # Load and test all policies
-python -m starlark_engine.engine --load-all --list-pools
+uv run star --load-all --list-pools
 
 # Test allocation for specific GPU
-python -m starlark_engine.engine --load-all --test-gpu 0
+uv run star --load-all --test-gpu 0
 
 # Load specific policy file
-python -m starlark_engine.engine --load ../policies/development.gsky
+uv run star --load ../policies/development.gsky
 ```
 
 Or use the build script from project root:

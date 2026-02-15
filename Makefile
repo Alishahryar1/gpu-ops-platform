@@ -51,7 +51,7 @@ run-cli:
 # Policy engine (using UV)
 policy-test:
 	@echo "Testing policy engine..."
-	cd python && uv sync && python -m starlark_engine.engine --load-all
+	cd python && uv sync && uv run star --load-all
 
 policy-install:
 	@echo "Installing policy engine dependencies with UV..."

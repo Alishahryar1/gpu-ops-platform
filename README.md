@@ -105,13 +105,13 @@ cd python
 uv sync
 
 # Load and test policies
-python -m starlark_engine.engine --load-all
+uv run star --load-all
 
 # View registered pools
-python -m starlark_engine.engine --load-all --list-pools
+uv run star --load-all --list-pools
 
 # Test allocation for specific GPU
-python -m starlark_engine.engine --load-all --test-gpu 0
+uv run star --load-all --test-gpu 0
 ```
 
 ## API Endpoints
