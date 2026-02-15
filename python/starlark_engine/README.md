@@ -33,7 +33,7 @@ uv run star --load-all --list-pools
 uv run star --load-all --test-gpu 0
 
 # Load specific policy file
-uv run star --load ../policies/development.gsky
+uv run star --load policies/development.gsky
 ```
 
 Or use the build script from project root:
@@ -52,7 +52,7 @@ make policy-test
 from starlark_engine import PolicyEngine, GPUInfo
 
 # Create engine
-engine = PolicyEngine(policy_dir="../policies")
+engine = PolicyEngine(policy_dir="policies")
 
 # Load all policies
 engine.load_all_policies()

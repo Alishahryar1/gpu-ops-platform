@@ -1,0 +1,42 @@
+# Basic GPU Pool Policy
+# A minimal policy for general-purpose GPU allocation
+
+def basic_pool():
+    return gpu_pool(
+        name = "gpu_pool_basic",
+        gpu_type = ["RTX_5070ti", "RTX_4090", "A100"],
+        min_memory_gb = 8,
+        max_temp_c = 90,
+        power_policy = "balanced",
+        health_threshold = 0.9,
+
+        opt_strategies = [
+            optimize_clock(target = "balanced", temp_limit = 85),
+            optimize_memory(strategy = "on_demand", waste_threshold = 0.3)
+        ],
+
+        health_checks = [
+            check("temperature", interval_sec = 30),
+            check("memory", interval_sec = 60)
+        ]
+    )
+
+gpu_ops.register_pool(basic_pool())
+
+def basic_scheduling():
+    return schedule_ruleset(
+        name = "basic_scheduling",
+
+        rules = [
+            priority_rule(
+                label = "job_priority",
+                values = ["high", "normal", "low"]
+            ),
+            balance_rule(
+                metric = "temperature",
+                strategy = "least"
+            )
+        ]
+    )
+
+gpu_ops.register_schedule(basic_scheduling())

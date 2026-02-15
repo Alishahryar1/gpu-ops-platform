@@ -348,8 +348,11 @@ def main():
     """CLI for the policy engine."""
     import argparse
 
+    # Default policy dir: python/policies (next to the engine)
+    _default_policy_dir = str(Path(__file__).resolve().parent.parent / "policies")
+
     parser = argparse.ArgumentParser(description="GPU Ops Policy Engine")
-    parser.add_argument("--policy-dir", default="./policies", help="Policy directory")
+    parser.add_argument("--policy-dir", default=_default_policy_dir, help="Policy directory")
     parser.add_argument("--load", help="Load specific policy file")
     parser.add_argument("--load-all", action="store_true", help="Load all policies")
     parser.add_argument("--list-pools", action="store_true", help="List registered pools")

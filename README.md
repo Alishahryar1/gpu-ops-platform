@@ -146,10 +146,11 @@ gpu-ops-platform/
 │   ├── health/          # Health checks
 │   ├── metrics/         # Prometheus metrics
 │   └── config/          # Configuration management
-├── policies/            # Starlark policy definitions
-│   ├── production.gsky  # Production pool policy
-│   └── development.gsky # Development pool policy
 ├── python/
+│   ├── policies/        # Starlark policy definitions
+│   │   ├── basic.gsky       # Basic pool policy
+│   │   ├── production.gsky  # Production pool policy
+│   │   └── development.gsky # Development pool policy
 │   └── starlark_engine/ # Starlark policy evaluator
 ├── bin/                 # Built binaries (created after build)
 ├── build.ps1            # Windows build script
@@ -162,14 +163,14 @@ gpu-ops-platform/
 - Run `go generate` if you add new protobuf files
 - Use `go test -v ./...` to run all tests
 - Check `/metrics` endpoint for current GPU metrics
-- Look at `policies/` for examples of Starlark policy syntax
+- Look at `python/policies/` for examples of Starlark policy syntax
 - Use `uv sync` in `python/` to install dependencies
 - The Starlark engine uses pure Python for evaluation (no Go integration yet)
 
 ## Next Steps
 
 1. **Explore the code**: Start by looking at `pkg/gpu/gpu.go` for GPU discovery
-2. **Write a policy**: Create a new `.gsky` file in `policies/`
+2. **Write a policy**: Create a new `.gsky` file in `python/policies/`
 3. **Add health checks**: See `pkg/health/health.go` to understand health monitoring
 4. **NVML Integration**: Replace mock GPU data with actual `github.com/NVIDIA/go-nvml` calls
 5. **Add web UI**: Build a dashboard to visualize GPU status and health
